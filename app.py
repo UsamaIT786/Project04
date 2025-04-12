@@ -1,53 +1,60 @@
 import streamlit as st
 import pandas as pd
 
+st.title("🌎 Unit Converter Web App By Usama Muzammil ™")
+st.markdown("### Converts Length, Weight, and Time Instantly")
+st.write("Welcome and get => Quick, easy, and accurate conversions at your fingertips! 😊")
 
 
-def length_converter():
-    print("\nLength Converter")
-    print("1. Meters to Kilometers")
-    print("2. Kilometers to Meters")
-    choice = input("Enter choice (1 or 2): ")
+category = st.selectbox("Choose a Category 🚀", ["Length", "Weight", "Time"])
 
-    if choice == '1':
-        meters = float(input("Enter length in meters: "))
-        print(f"{meters} meters = {meters / 1000} kilometers")
-    elif choice == '2':
-        km = float(input("Enter length in kilometers: "))
-        print(f"{km} kilometers = {km * 1000} meters")
+
+if category == "Length":
+    unit = st.selectbox("Select Conversion 🤷‍♀️", ["Kilometers to Miles", "Miles to Kilometers"])
+elif category == "Weight":
+    unit = st.selectbox("Select Conversion 🤷‍♀️", ["Kilograms to Pounds", "Pounds to Kilograms"])
+elif category == "Time":
+    unit = st.selectbox("Select Conversion 🤷‍♀️", ["Seconds to Minutes", "Minutes to Seconds", 
+                                              "Minutes to Hours", "Hours to Minutes", 
+                                              "Hours to Days", "Days to Hours"])
+
+
+value = st.number_input("Enter the value to Convert", min_value=0.0, format="%.2f")
+
+
+def convert_units(category, value, unit):
+    if category == "Length":
+        if unit == "Kilometers to Miles":
+            return value * 0.621371
+        elif unit == "Miles to Kilometers":
+            return value / 0.621371
+        
+    elif category == "Weight":
+        if unit == "Kilograms to Pounds":
+            return value * 2.20462
+        elif unit == "Pounds to Kilograms":
+            return value / 2.20462
+
+    elif category == "Time":
+        if unit == "Seconds to Minutes":
+            return value / 60
+        elif unit == "Minutes to Seconds":
+            return value * 60
+        elif unit == "Minutes to Hours":
+            return value / 60
+        elif unit == "Hours to Minutes":
+            return value * 60
+        elif unit == "Hours to Days":
+            return value / 24
+        elif unit == "Days to Hours":
+            return value * 24
+    
+    return None 
+
+
+if st.button("Convert"):
+    result = convert_units(category, value, unit)
+    if result is not None:
+        st.success(f"The result is **{result:.2f}**")
     else:
-        print("Invalid input")
-
-def temperature_converter():
-    print("\nTemperature Converter")
-    print("1. Celsius to Fahrenheit")
-    print("2. Fahrenheit to Celsius")
-    choice = input("Enter choice (1 or 2): ")
-
-    if choice == '1':
-        celsius = float(input("Enter temperature in Celsius: "))
-        fahrenheit = (celsius * 9/5) + 32
-        print(f"{celsius}°C = {fahrenheit}°F")
-    elif choice == '2':
-        fahrenheit = float(input("Enter temperature in Fahrenheit: "))
-        celsius = (fahrenheit - 32) * 5/9
-        print(f"{fahrenheit}°F = {celsius}°C")
-    else:
-        print("Invalid input")
-
-def main():
-    print("Unit Converter App")
-    print("1. Length Converter")
-    print("2. Temperature Converter")
-
-    option = input("Choose a converter (1 or 2): ")
-
-    if option == '1':
-        length_converter()
-    elif option == '2':
-        temperature_converter()
-    else:
-        print("Invalid option selected")
-
-if __name__ == "__main__":
-    main()
+        st.error("Invalid conversion. Please try again.")
